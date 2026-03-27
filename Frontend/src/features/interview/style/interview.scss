@@ -1,0 +1,341 @@
+$bg-page: #0d1117;
+$bg-card: #161b22;
+$bg-panel: #1c2230;
+$border-color: #2a3348;
+$text-primary: #e6edf3;
+$text-muted: #7d8590;
+$accent: #ff2d78;
+$font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+.interview-page {
+    width: 100%;
+    min-height: 100vh;
+    background-color: $bg-page;
+    color: $text-primary;
+    font-family: $font-stack;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.interview-layout {
+    width: 100%;
+    max-width: 1320px;
+    min-height: 82vh;
+    background-color: $bg-card;
+    border: 1px solid rgba($text-primary, 0.14);
+    border-radius: 1.25rem;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 220px 1fr 280px;
+}
+
+.interview-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.25rem 1rem;
+    width: 220px;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex-shrink: 0;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    &__item {
+        background: transparent;
+        border: 1px solid transparent;
+        color: $text-primary;
+        text-align: left;
+        font-size: 1.05rem;
+        line-height: 1.2;
+        font-weight: 600;
+        padding: 0.35rem 0.5rem;
+        border-radius: 0.4rem;
+        cursor: pointer;
+        transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+
+        &:hover {
+            color: #ffffff;
+            border-color: rgba($text-primary, 0.35);
+            background-color: rgba($text-primary, 0.06);
+        }
+
+        &--active {
+            color: $accent;
+            border-color: rgba($accent, 0.5);
+            background-color: rgba($accent, 0.08);
+        }
+    }
+
+    &__download {
+        width: 100%;
+    }
+}
+
+.interview-content {
+    border-left: 1px solid rgba($text-primary, 0.6);
+    border-right: 1px solid rgba($text-primary, 0.6);
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.content-pane {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        h2 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        span {
+            border: 1px solid rgba($text-primary, 0.65);
+            border-radius: 999px;
+            font-size: 0.82rem;
+            padding: 0.2rem 0.65rem;
+            color: $text-muted;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+}
+
+.question-card,
+.roadmap-card {
+    border: 1px solid rgba($text-primary, 0.55);
+    border-radius: 0.75rem;
+    padding: 0.85rem 0.95rem;
+    background-color: rgba($bg-panel, 0.85);
+
+    h3 {
+        margin: 0;
+        font-size: 0.96rem;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 0.45rem 0 0;
+        color: $text-muted;
+        line-height: 1.5;
+        font-size: 0.88rem;
+    }
+
+    strong {
+        color: $text-primary;
+        font-weight: 600;
+    }
+}
+
+.question-card__head {
+    display: flex;
+    gap: 0.55rem;
+    align-items: flex-start;
+}
+
+.question-card__index {
+    flex-shrink: 0;
+    color: $accent;
+    border: 1px solid rgba($accent, 0.5);
+    border-radius: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.45rem;
+}
+
+.roadmap-card ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.05rem;
+    color: $text-muted;
+
+    li {
+        margin-bottom: 0.3rem;
+        font-size: 0.88rem;
+        line-height: 1.45;
+    }
+}
+
+.interview-sidebar {
+    padding: 1.6rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.score-box {
+    --score: 0%;
+    --score-accent-1: #92a3bb;
+    --score-accent-2: #d8e0eb;
+    border: 1px solid rgba($text-primary, 0.18);
+    border-radius: 1rem;
+    padding: 1rem 1.05rem;
+    background:
+        linear-gradient(90deg,
+            color-mix(in srgb, var(--score-accent-1) 16%, transparent) 0%,
+            color-mix(in srgb, var(--score-accent-2) 16%, transparent) var(--score),
+            transparent var(--score),
+            transparent 100%),
+        linear-gradient(155deg, rgba($bg-panel, 0.94), rgba($bg-card, 0.88));
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        border-radius: inherit;
+        background: linear-gradient(135deg,
+                color-mix(in srgb, var(--score-accent-1) 55%, transparent),
+                rgba($text-primary, 0.08),
+                color-mix(in srgb, var(--score-accent-2) 38%, transparent));
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        border-color: color-mix(in srgb, var(--score-accent-1) 45%, rgba($text-primary, 0.3));
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.34),
+            0 0 0 1px color-mix(in srgb, var(--score-accent-2) 24%, transparent);
+    }
+
+    &__label {
+        margin: 0;
+        color: rgba($text-primary, 0.68);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    &__value {
+        margin: 0.45rem 0 0;
+        font-size: clamp(2rem, 2.6vw, 2.25rem);
+        font-weight: 900;
+        color: #f7fbff;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        text-shadow: 0 4px 18px color-mix(in srgb, var(--score-accent-1) 28%, transparent);
+    }
+
+    &.score-box--neutral {
+        --score-accent-1: #27a2c4;
+        --score-accent-2: #1cb4cf;
+    }
+
+    &.score-box--danger {
+        --score-accent-1: #ff5c75;
+        --score-accent-2: #ff2d55;
+    }
+}
+
+.skill-gaps {
+    h3 {
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: $text-primary;
+    }
+
+    &__list {
+        margin-top: 0.9rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+    }
+}
+
+.skill-tag {
+    border: 1px solid rgba($text-primary, 0.75);
+    color: $text-primary;
+    border-radius: 0.5rem;
+    padding: 0.28rem 0.68rem;
+    font-size: 0.82rem;
+    line-height: 1.25;
+    background-color: transparent;
+}
+
+.empty-state {
+    color: $text-muted;
+    font-size: 0.9rem;
+}
+
+.loading-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: $bg-page;
+    color: $text-primary;
+    font-family: $font-stack;
+}
+
+@media (max-width: 1080px) {
+    .interview-layout {
+        grid-template-columns: 190px 1fr;
+    }
+
+    .interview-sidebar {
+        grid-column: 1 / -1;
+        border-top: 1px solid rgba($text-primary, 0.6);
+    }
+
+    .interview-content {
+        border-right: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .interview-page {
+        padding: 0.75rem;
+    }
+
+    .interview-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .interview-nav,
+    .interview-content,
+    .interview-sidebar {
+        border: none;
+        border-bottom: 1px solid rgba($text-primary, 0.45);
+    }
+
+    .interview-nav {
+        gap: 1rem;
+
+        &__content {
+            margin: 0;
+            gap: 0.55rem;
+        }
+    }
+}
