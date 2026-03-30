@@ -4,16 +4,30 @@ const cors = require('cors')
 
 const app = express()
 
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://airesume-ashen-rho.vercel.app'
+]
+
+const vercelPreviewPattern = /^https:\/\/airesume-.*\.vercel\.app$/
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:5174',
-        'https://airesume-ashen-rho.vercel.app',
-        'https://airesume-git-main-sarthakprivate93-7266s-projects.vercel.app'
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: (origin, callback) => {
+        // Allow non-browser clients and same-origin requests without Origin header.
+        if (!origin) {
+            return callback(null, true)
+        }
+
+        if (allowedOrigins.includes(origin) || vercelPreviewPattern.test(origin)) {
+            return callback(null, true)
+        }
+
+        return callback(new Error('Not allowed by CORS'))
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }))
 
