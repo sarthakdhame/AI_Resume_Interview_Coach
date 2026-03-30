@@ -1,17 +1,13 @@
-import axios from 'axios';
-import { API_BASE_URL } from '../config';
-
-const BASE_URL = API_BASE_URL;
+import api from './api';
 
 /**
  * @description Generate interview report with job description and resume
  */
 export const generateInterviewReport = async (data) => {
-    return axios.post(`${BASE_URL}/api/interview`, data, {
+    return api.post('/api/interview', data, {
         headers: {
             'Content-Type': 'multipart/form-data'
-        },
-        withCredentials: true
+        }
     });
 };
 
@@ -19,18 +15,15 @@ export const generateInterviewReport = async (data) => {
  * @description Get interview report by ID
  */
 export const getInterviewReportById = async (interviewId) => {
-    return axios.get(`${BASE_URL}/api/interview/${interviewId}`, {
-        withCredentials: true
-    });
+    return api.get(`/api/interview/${interviewId}`);
 };
 
 /**
  * @description Generate resume PDF
  */
 export const generateResumePdf = async (interviewReportId) => {
-    return axios.post(`${BASE_URL}/api/interview/resume/pdf/${interviewReportId}`, null, {
-        responseType: 'blob',
-        withCredentials: true
+    return api.post(`/api/interview/resume/pdf/${interviewReportId}`, null, {
+        responseType: 'blob'
     });
 };
 
@@ -38,7 +31,5 @@ export const generateResumePdf = async (interviewReportId) => {
  * @description Get all interview reports for logged-in user
  */
 export const getAllInterviewReports = async () => {
-    return axios.get(`${BASE_URL}/api/interview/`, {
-        withCredentials: true
-    });
+    return api.get('/api/interview/');
 };
