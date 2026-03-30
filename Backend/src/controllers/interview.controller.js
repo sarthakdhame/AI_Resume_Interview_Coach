@@ -21,10 +21,19 @@ async function generateInterviewReportController(req, res) {
 
         let resumeContent = ''
         if (req.file?.buffer) {
-            const parser = new PDFParse({ data: req.file.buffer })
-            const parsed = await parser.getText()
-            await parser.destroy()
-            resumeContent = parsed?.text || ''
+            try {
+                const parser = new PDFParse({ data: req.file.buffer })
+                const parsed = await parser.getText()
+                await parser.destroy()
+                resumeContent = parsed?.text || ''
+            } catch (pdfError) {
+                console.error('Resume PDF parsing failed:', pdfError)
+                if (!selfDescription.trim()) {
+                    return res.status(400).json({
+                        error: 'Could not read the uploaded PDF. Please upload a valid PDF or provide self description.'
+                    })
+                }
+            }
         }
 
         const interviewReportByAi = await generateInterviewReport({
@@ -47,7 +56,9 @@ async function generateInterviewReportController(req, res) {
         })
     } catch (error) {
         console.error('Error creating interview report:', error)
-        return res.status(500).json({ error: 'Failed to generate interview report.' })
+        const statusCode = error?.statusCode || 500
+        const clientMessage = error?.clientMessage || 'Failed to generate interview report.'
+        return res.status(statusCode).json({ error: clientMessage })
     }
 }
 

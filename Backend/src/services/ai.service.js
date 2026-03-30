@@ -86,9 +86,31 @@ const interviewReportSchema = {
     required: ["title", "matchScore", "technicalQuestions", "behaviouralQuestions", "skillGaps", "preparationPlan"]
 }
 
+function parseJsonResponseText(rawText) {
+    if (!rawText || typeof rawText !== 'string') {
+        throw new Error('Empty AI response received.')
+    }
+
+    const trimmed = rawText.trim()
+    const withoutCodeFence = trimmed
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/```$/, '')
+        .trim()
+
+    return JSON.parse(withoutCodeFence)
+}
+
 
 async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
     try {
+        if (!process.env.GOOGLE_GENAI_API_KEY) {
+            const configError = new Error('Missing GOOGLE_GENAI_API_KEY')
+            configError.statusCode = 500
+            configError.clientMessage = 'AI service is not configured on the server. Please contact support.'
+            throw configError
+        }
+
         const prompt = `You are an expert technical recruiter and interview coach. Analyze the following candidate information and generate a comprehensive interview report in JSON format.
 
         Candidate Resume:
@@ -121,12 +143,31 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
         })
 
         console.log('Gemini response received')
-        const report = JSON.parse(response.text)
+        const responseText = typeof response?.text === 'function' ? response.text() : response?.text
+        const report = parseJsonResponseText(responseText)
         console.log('Interview report parsed and generated successfully')
         return report
     } catch (err) {
         console.error('Error generating interview report:', err.message)
         console.error('Full error:', err)
+
+        const message = String(err?.message || '').toLowerCase()
+
+        if (!err?.statusCode && (message.includes('quota') || message.includes('rate') || message.includes('429'))) {
+            err.statusCode = 503
+            err.clientMessage = 'AI service is temporarily busy. Please retry in a minute.'
+        }
+
+        if (!err?.statusCode && message.includes('api key')) {
+            err.statusCode = 500
+            err.clientMessage = 'AI service is not configured on the server. Please contact support.'
+        }
+
+        if (!err?.statusCode && (message.includes('json') || message.includes('parse'))) {
+            err.statusCode = 502
+            err.clientMessage = 'Received an invalid response from AI service. Please try again.'
+        }
+
         throw err
     }
 }
@@ -137,12 +178,14 @@ async function generatePdfFromHtml(htmlContent) {
     const page = await browser.newPage()
     await page.setContent(htmlContent, { waitUntil: 'networkidle0' })
 
-    const pdfBuffer = await page.pdf({ format: 'A4',margin:{
-        top: "20mm",
-        bottom: "20mm",
-        left: "15mm",
-        right: "15mm"
-    } })
+    const pdfBuffer = await page.pdf({
+        format: 'A4', margin: {
+            top: "20mm",
+            bottom: "20mm",
+            left: "15mm",
+            right: "15mm"
+        }
+    })
     await browser.close()
     return pdfBuffer
 }
