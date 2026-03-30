@@ -10,7 +10,8 @@ app.use(cors({
     origin: [
         'http://localhost:5173',
         'http://localhost:5174',
-        'https://airesume-ashen-rho.vercel.app'
+        'https://airesume-ashen-rho.vercel.app',
+        'https://airesume-git-main-sarthakprivate93-7266s-projects.vercel.app'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
