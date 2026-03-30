@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router'
 
 const Home = () => {
 
-    const { loading, generateReport, reports } = useInterview()
+    const { loading, generateReport, reports, error } = useInterview()
     const [jobDescription, setJobDescription] = useState("")
     const [selfDescription, setSelfDescription] = useState("")
     const resumeInputRef = useRef()
@@ -123,6 +123,11 @@ const Home = () => {
                         Generate My Interview Strategy
                     </button>
                 </div>
+                {error && (
+                    <div className='interview-card__footer' style={{ paddingTop: 0 }}>
+                        <p style={{ color: '#a11', margin: 0 }}>{error}</p>
+                    </div>
+                )}
             </div>
 
             {/* Recent Reports List */}
