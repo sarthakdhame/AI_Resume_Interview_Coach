@@ -19,6 +19,11 @@ app.get("/", (req, res) => {
     res.send("AI Resume Interview Coach Backend Running ✅");
 });
 
+app.get("/health", (req, res) => {
+    res.json({ status: "OK", uptime: process.uptime() });
+});
+
+
 app.use('/api/auth', authRouter)
 app.use('/api/interview', interviewRouter)
 
