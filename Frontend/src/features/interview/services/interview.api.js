@@ -1,9 +1,22 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../../../config'
 
+const TOKEN_KEY = 'ai_resume_auth_token'
+
 const api = axios.create({
     baseURL: API_BASE_URL,
     withCredentials: true,
+})
+
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem(TOKEN_KEY)
+    if (token) {
+        config.headers = {
+            ...(config.headers || {}),
+            Authorization: `Bearer ${token}`
+        }
+    }
+    return config
 })
 
 /**
@@ -19,11 +32,10 @@ export const generateInterviewReport = async ({ selfDescription, jobDescription,
         formData.append('resume', resumeFile)
     }
 
-    return axios.post(`${API_BASE_URL}/api/interview/`, formData, {
+    return api.post('/api/interview/', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
-        },
-        withCredentials: true
+        }
     })
         .then(response => response.data)
         .catch(err => { throw err })
