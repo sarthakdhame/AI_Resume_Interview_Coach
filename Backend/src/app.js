@@ -15,6 +15,9 @@ app.use(cors({
 const authRouter = require('./routes/auth.routes')
 const interviewRouter = require('./routes/interview.routes')
 
+app.get("/", (req, res) => {
+    res.send("AI Resume Interview Coach Backend Running ✅");
+});
 
 app.use('/api/auth', authRouter)
 app.use('/api/interview', interviewRouter)
