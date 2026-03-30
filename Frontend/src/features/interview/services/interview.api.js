@@ -1,13 +1,13 @@
 import axios from 'axios';
+import { API_BASE_URL } from '../../../config'
 
 const api = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: API_BASE_URL,
     withCredentials: true,
-
 })
 
 /**
- * @description
+ * @description Generate interview report
  */
 
 export const generateInterviewReport = async ({ selfDescription, jobDescription, resumeFile }) => {
@@ -19,13 +19,14 @@ export const generateInterviewReport = async ({ selfDescription, jobDescription,
         formData.append('resume', resumeFile)
     }
 
-    const response = await api.post('/api/interview/', formData, {
+    return axios.post(`${API_BASE_URL}/api/interview/`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
-        }
+        },
+        withCredentials: true
     })
-
-    return response.data
+        .then(response => response.data)
+        .catch(err => { throw err })
 
 }
 
